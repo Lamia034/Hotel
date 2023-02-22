@@ -1,10 +1,10 @@
 <?php 
 session_start();
-require_once '../model/users.php';
-require_once '../controller/usersController.php';
-require_once '../database/DB.php';
-include_once('../app/classes/session.php');
-include_once('../app/classes/Redirect.php');
+// require_once '../model/users.php';
+// require_once '../controller/usersController.php';
+// require_once '../database/DB.php';
+// include_once('../app/classes/session.php');
+// include_once('../app/classes/Redirect.php');
 ?>
 
 <!DOCTYPE html>
