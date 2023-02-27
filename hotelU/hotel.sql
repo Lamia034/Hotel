@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 20 fév. 2023 à 09:26
+-- Généré le : lun. 27 fév. 2023 à 20:59
 -- Version du serveur : 10.4.27-MariaDB
 -- Version de PHP : 8.0.25
 
@@ -41,7 +41,8 @@ CREATE TABLE `clients` (
 INSERT INTO `clients` (`ClientId`, `ClientName`, `Email`, `Password`) VALUES
 (1, 'admin', 'lamia@gmail.com', '$2y$10$LtkptZ7KeXgsQmb6RLFQW.ZQ4ErjbQRAXx/6aGWJkQAw3p7MjYZwG'),
 (2, 'samia', 'samia@gmail.com', '$2y$10$iVNIC/Mdet0KSwTh2w1kF./rsXi.0ULaXtQzeFgmH6Tos2am0oXpW'),
-(3, 'nouaman', 'nouaman@gmail.com', '$2y$10$CUdqUe/w.jmTh1rQmlkxdupv8w6a.Aalv0757flqvaDb8Am6HKt6S');
+(3, 'nouaman', 'nouaman@gmail.com', '$2y$10$CUdqUe/w.jmTh1rQmlkxdupv8w6a.Aalv0757flqvaDb8Am6HKt6S'),
+(4, 'soumia', 'soumia@gmail.com', '$2y$10$lmXXgZG2vYFXpzLeSx6dTuXHgR1wZnd34Q3A5cJcUOCp6g.5Vuotu');
 
 -- --------------------------------------------------------
 
@@ -66,7 +67,16 @@ INSERT INTO `guests` (`GuestId`, `GuestName`, `GuestDOB`, `ReservationId`) VALUE
 (3, 'asa', '2023-02-17', 12),
 (4, 'ss', '2023-02-17', 14),
 (5, 'karim', '2023-02-17', 15),
-(6, 'lamia', '2023-02-14', 16);
+(6, 'lamia', '2023-02-14', 16),
+(7, '', NULL, 22),
+(8, 'mimi', '2023-02-27', 23),
+(9, '', NULL, 24),
+(10, '', NULL, 25),
+(11, '', NULL, 26),
+(12, '', NULL, 27),
+(13, '', NULL, 28),
+(14, '', NULL, 29),
+(15, '', NULL, 30);
 
 -- --------------------------------------------------------
 
@@ -91,19 +101,13 @@ CREATE TABLE `reservations` (
 --
 
 INSERT INTO `reservations` (`ReservationId`, `ClientName`, `RoomType`, `GuestsNumber`, `Arrive`, `SuiteType`, `Leave`, `ClientId`, `ReservationPrice`) VALUES
-(4, 'hamid', 'single', 0, '2023-03-09', 'standard', NULL, 0, 0),
-(5, '', 'suite', 0, '0000-00-00', 'standard', NULL, 0, 0),
-(6, 'sdc', 'single', 0, '2023-03-08', 'null', NULL, 0, 0),
-(7, 'd', 'single', 0, '2023-03-01', '--', NULL, 0, 0),
-(8, 'fzefez', 'single', 1, '2023-03-11', '--', NULL, 0, 0),
-(9, 'farid', 'double', 1, '2023-03-03', '--', NULL, 0, 0),
-(10, 'hanan', 'single', 0, '2023-03-11', 'standard', NULL, 0, 0),
-(11, 'xx', 'single', 0, '2023-02-15', '--', NULL, 0, 0),
-(12, 'kamal', 'single', 0, '2023-03-11', '--', '2023-03-12', 0, 0),
-(13, 'z', 'single', 0, '2023-03-02', '--', '2023-02-18', 2, 0),
-(14, 's', 'single', 1, '2023-02-17', '--', '2023-03-05', 2, 0),
-(15, 'jamal', 'suite', 1, '2023-03-09', 'presidential', '2023-03-12', 2, 13000),
-(16, 'nouaman', 'double', 1, '2023-03-02', '--', '2023-03-04', 3, 4000);
+(23, 'samia', 'double', 1, '2023-02-27', '--', '2023-03-05', 4, 4000),
+(24, 'samia', 'single', 0, '2023-02-27', '--', '2023-03-10', 2, 3000),
+(26, 'nouaman', 'single', 0, '2023-03-11', '--', '2023-03-12', 3, 3000),
+(27, 'nouaman', 'double', 0, '2023-03-05', '--', '2023-03-06', 3, 4000),
+(28, 'nouaman', 'double', 0, '2023-03-05', '--', '2023-03-12', 3, 4000),
+(29, 'nouaman', 'double', 0, '2023-03-12', '--', '2023-03-13', 3, 4000),
+(30, 'samia', 'suite', 0, '2023-02-27', 'standard', '2023-03-04', 2, 10000);
 
 -- --------------------------------------------------------
 
@@ -117,15 +121,19 @@ CREATE TABLE `rooms` (
   `RoomNumber` int(100) NOT NULL,
   `RoomPrice` int(255) NOT NULL,
   `RoomType` varchar(30) NOT NULL,
-  `SuiteType` varchar(100) NOT NULL
+  `SuiteType` varchar(100) NOT NULL,
+  `Arrive` date DEFAULT NULL,
+  `Leave` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `rooms`
 --
 
-INSERT INTO `rooms` (`RoomId`, `RoomImg`, `RoomNumber`, `RoomPrice`, `RoomType`, `SuiteType`) VALUES
-(1, '8.jpg', 2, 30, 'standard', 'normal room');
+INSERT INTO `rooms` (`RoomId`, `RoomImg`, `RoomNumber`, `RoomPrice`, `RoomType`, `SuiteType`, `Arrive`, `Leave`) VALUES
+(1, '2.jpg', 2, 30, 'standard', 'normal room', NULL, NULL),
+(4, '10.jpg', 6, 4000, 'double', '', NULL, NULL),
+(5, '11.jpg', 3, 130000, 'suite', 'honeymoon', NULL, NULL);
 
 --
 -- Index pour les tables déchargées
@@ -163,25 +171,25 @@ ALTER TABLE `rooms`
 -- AUTO_INCREMENT pour la table `clients`
 --
 ALTER TABLE `clients`
-  MODIFY `ClientId` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ClientId` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `guests`
 --
 ALTER TABLE `guests`
-  MODIFY `GuestId` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `GuestId` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT pour la table `reservations`
 --
 ALTER TABLE `reservations`
-  MODIFY `ReservationId` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `ReservationId` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT pour la table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `RoomId` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `RoomId` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
