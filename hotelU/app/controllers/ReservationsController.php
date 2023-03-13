@@ -14,7 +14,7 @@ class ReservationsController{
 				'ReservationId' => $_POST['ReservationId']
 			);
 			$reservation = reservations::getReservation($data);
-			return $reservations;
+			return $reservation;
 		}
 	}
 

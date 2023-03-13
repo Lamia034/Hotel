@@ -117,17 +117,96 @@ class reservations {
 
 
 	static public function checkreservation($reservationData){
-		$stmt = connection::connect()->prepare('SELECT * FROM reservations WHERE RoomType = :RoomType AND `Leave` > :Arrive ORDER BY `Leave` ASC');
+		$stmt = connection::connect()->prepare('SELECT * FROM reservations WHERE RoomType = :RoomType AND (`Leave` <= :Arrive OR Arrive >= :Leave)');
 		$stmt->bindParam(':RoomType', $reservationData['RoomType'], PDO::PARAM_STR);
 		$stmt->bindParam(':Arrive', $reservationData['Arrive'], PDO::PARAM_STR);
+		$stmt->bindParam(':Leave', $reservationData['Leave'], PDO::PARAM_STR);
 		$stmt->execute();
-		$result = $stmt->fetch(PDO::FETCH_ASSOC);
-		if($result){
-			return 'no';
-		}else{
-			return 'ok';
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	
+		$available = true;
+	
+		foreach($result as $row) {
+			if(($reservationData['Arrive'] >= $row['Arrive'] && $reservationData['Arrive'] <= $row['Leave']) || 
+				($reservationData['Leave'] >= $row['Arrive'] && $reservationData['Leave'] <= $row['Leave'])) {
+				$available = false;
+				break;
+			}
+		}
+	
+		return $available ? 'ok' : 'no';
+	}
+	
+
+
+
+
+	static public function delete($data){
+		$ReservationId = $data['ReservationId'];
+		try{
+			$query = 'DELETE FROM reservations WHERE ReservationId=:ReservationId';
+			$stmt = connection::connect()->prepare($query);
+			$stmt->execute(array(":ReservationId" => $ReservationId));
+			if($stmt->execute()){
+				return 'ok';
+			}
+		}catch(PDOException $ex){
+			echo 'erreur' . $ex->getMessage();
 		}
 	}
+
+
+
+
+}
+
+
+
+	// static public function checkreservation($reservationData){
+	// 	$stmt = connection::connect()->prepare('SELECT * FROM reservations WHERE RoomType = :RoomType');
+	// 	$stmt->bindParam(':RoomType', $reservationData['RoomType'], PDO::PARAM_STR);
+	// 	$stmt->execute();
+	// 	$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+	// 	foreach ($results as $result) {
+	// 		if ($result['Arrive'] <= $reservationData['Leave'] && $result['Leave'] >= $reservationData['Arrive']) {
+	// 			return 'no'; // Room is not available for the given reservation period
+	// 		}
+	// 	}
+	
+	// 	return 'ok'; // Room is available for the given reservation period
+	// }
+	
+
+
+
+	// static public function checkreservation($reservationData){
+	// 	$stmt = connection::connect()->prepare('SELECT * FROM reservations WHERE RoomType = :RoomType AND (Arrive > :Leave OR `Leave` < :Arrive) ');
+	// 	$stmt->bindParam(':RoomType', $reservationData['RoomType'], PDO::PARAM_STR);
+	// 	$stmt->bindParam(':Arrive', $reservationData['Arrive'], PDO::PARAM_STR);
+	// 	$stmt->bindParam(':Leave', $reservationData['Leave'], PDO::PARAM_STR);
+	// 	$stmt->execute();
+	// 	$result = $stmt->fetch(PDO::FETCH_ASSOC);
+	// 	if($result){
+	// 		return 'no';
+	// 	}else{
+	// 		return 'ok';
+	// 	}
+	// }
+
+
+	// static public function checkreservation($reservationData){
+	// 	$stmt = connection::connect()->prepare('SELECT * FROM reservations WHERE RoomType = :RoomType AND `Leave` > :Arrive ORDER BY `Leave` ASC');
+	// 	$stmt->bindParam(':RoomType', $reservationData['RoomType'], PDO::PARAM_STR);
+	// 	$stmt->bindParam(':Arrive', $reservationData['Arrive'], PDO::PARAM_STR);
+	// 	$stmt->execute();
+	// 	$result = $stmt->fetch(PDO::FETCH_ASSOC);
+	// 	if($result){
+	// 		return 'no';
+	// 	}else{
+	// 		return 'ok';
+	// 	}
+	// }
 	
 
 	
@@ -155,21 +234,3 @@ class reservations {
 
 
 
-	static public function delete($data){
-		$ReservationId = $data['ReservationId'];
-		try{
-			$query = 'DELETE FROM reservations WHERE ReservationId=:ReservationId';
-			$stmt = connection::connect()->prepare($query);
-			$stmt->execute(array(":ReservationId" => $ReservationId));
-			if($stmt->execute()){
-				return 'ok';
-			}
-		}catch(PDOException $ex){
-			echo 'erreur' . $ex->getMessage();
-		}
-	}
-
-
-
-
-}

@@ -8,8 +8,8 @@
         $options = array(PDO::ATTR_PERSISTENT => true);
 
         try {
-            $connection = new PDO($dsn, "root", "", $options);
-            $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $connection = new PDO($dsn, "root","", $options);
+            $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //PDO::ERRMODE_SILENT , PDO::ERRMODE_WARNING , PDO::ERRMODE_EXCEPTION .
             return $connection;
         }catch(PDOException $error) {
             echo "Connection failed: " . $error->getMessage();
